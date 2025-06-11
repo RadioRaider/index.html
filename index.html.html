@@ -1,0 +1,476 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Electrical Science Practice Test</title>
+    <style>
+        /* General Body and Layout Styling */
+        body {
+            font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Helvetica, Arial, sans-serif;
+            background-color: #87CEEB; /* Sky Blue background */
+            color: #FFD700; /* Gold lettering */
+            line-height: 1.6;
+            margin: 0;
+            padding: 20px;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            min-height: 100vh;
+        }
+
+        /* Main container for the quiz */
+        #quiz-container {
+            width: 100%;
+            max-width: 800px;
+            background-color: rgba(0, 0, 0, 0.6); /* Semi-transparent black for contrast */
+            padding: 30px 40px;
+            border-radius: 12px;
+            border: 1px solid #00BFFF;
+            box-shadow: 0 0 20px #00BFFF, 0 0 30px #00BFFF, inset 0 0 20px #00BFFF; /* Fluorescent glow */
+        }
+
+        /* Header styling */
+        h1 {
+            color: #FFD700; /* Gold */
+            text-align: center;
+            margin-bottom: 25px;
+            font-size: 2.2em;
+            font-weight: 700;
+            text-shadow: 0 0 10px #FFD700, 0 0 20px #FFD700;
+        }
+
+        /* Styling for the setup section */
+        #setup, #results {
+            text-align: center;
+            padding: 25px;
+            border: 1px dashed #FFD700; /* Gold dashed border */
+            border-radius: 8px;
+            margin-bottom: 25px;
+            background-color: rgba(0, 0, 0, 0.2);
+        }
+
+        #setup label {
+            font-weight: 500;
+            display: block;
+            margin-bottom: 15px;
+            font-size: 1.1em;
+        }
+
+        /* Code Key input styling */
+        #code-key-input {
+            padding: 10px;
+            width: 150px;
+            text-align: center;
+            border-radius: 5px;
+            border: 1px solid #FFD700;
+            background-color: #333;
+            color: #FFD700;
+            margin: 0 15px;
+            font-size: 1em;
+            transition: border-color 0.2s, box-shadow 0.2s;
+        }
+        #code-key-input:focus {
+            outline: none;
+            border-color: #00BFFF;
+            box-shadow: 0 0 10px #00BFFF;
+        }
+
+        /* Styling for individual question blocks */
+        .question-block {
+            margin-bottom: 30px;
+            padding: 20px;
+            border-radius: 8px;
+            border: 1px solid #FFD700;
+            transition: background-color 0.3s, box-shadow 0.3s;
+        }
+
+        .question-text {
+            font-weight: 600;
+            font-size: 1.2em;
+            margin-bottom: 15px;
+            color: #FFD700; /* Gold */
+        }
+
+        /* Container for radio button options */
+        .options-container {
+            display: flex;
+            flex-direction: column;
+            gap: 10px;
+        }
+
+        /* Styling for each option's label */
+        .option-label {
+            display: block;
+            padding: 14px 18px;
+            border-radius: 8px;
+            border: 1px solid #FFD700;
+            cursor: pointer;
+            transition: background-color 0.2s, box-shadow 0.2s;
+        }
+        .option-label:hover {
+            background-color: rgba(0, 191, 255, 0.2);
+            box-shadow: 0 0 15px #00BFFF;
+        }
+        .option-label input {
+            margin-right: 12px;
+        }
+
+        /* General button styling */
+        button {
+            background-color: transparent;
+            color: #FFD700;
+            padding: 12px 28px;
+            border: 2px solid #FFD700;
+            border-radius: 8px;
+            font-size: 1.1em;
+            font-weight: 500;
+            cursor: pointer;
+            transition: background-color 0.2s, box-shadow 0.2s, color 0.2s;
+            text-shadow: 0 0 5px #FFD700;
+        }
+        button:hover {
+            background-color: #FFD700;
+            color: #333;
+            box-shadow: 0 0 20px #FFD700;
+            text-shadow: none;
+        }
+        button:active {
+            transform: translateY(1px);
+        }
+        button:disabled {
+            background-color: #555;
+            color: #888;
+            border-color: #888;
+            cursor: not-allowed;
+            box-shadow: none;
+            text-shadow: none;
+        }
+
+        /* --- Result Feedback Styling --- */
+        .correct {
+            background-color: rgba(0, 255, 0, 0.2) !important;
+            border-color: #00FF00 !important;
+            box-shadow: 0 0 15px #00FF00;
+            font-weight: bold;
+            color: #fff;
+        }
+        .incorrect {
+            background-color: rgba(255, 0, 0, 0.2) !important;
+            border-color: #FF0000 !important;
+            box-shadow: 0 0 15px #FF0000;
+            color: #fff;
+        }
+        .unanswered {
+            background-color: rgba(255, 255, 0, 0.2) !important;
+            border-color: #FFFF00 !important;
+            box-shadow: 0 0 15px #FFFF00;
+        }
+        
+        /* Styling for the results section */
+        #results h2 {
+            color: #FFD700; /* Gold */
+            margin-bottom: 10px;
+        }
+        #results p {
+            font-size: 1.3em;
+            font-weight: bold;
+            color: #FFD700; /* Gold */
+        }
+        #score-value {
+             color: #00BFFF; /* Sky Blue score */
+             font-size: 1.5em;
+        }
+    </style>
+</head>
+<body>
+
+<div id="quiz-container">
+    <h1>Electrical Science Practice Test ⚡</h1>
+
+    <div id="setup">
+        <label for="code-key-input">Please Enter Access Code</label>
+        <div>
+            <input type="text" id="code-key-input" placeholder="Access Code">
+            <button id="start-btn">Start Quiz</button>
+        </div>
+    </div>
+
+    <form id="quiz-form" style="display:none;">
+        <div id="questions-wrapper"></div>
+        <div style="text-align: center; margin-top: 30px;">
+            <button type="submit" id="submit-btn">Submit Answers</button>
+        </div>
+    </form>
+    
+    <div id="results" style="display:none;">
+        <h2>Quiz Results</h2>
+        <p id="score"></p>
+        <button id="restart-btn" style="margin-top: 15px;">Try Again</button>
+    </div>
+</div>
+
+<script>
+// --- Data Source ---
+// Contains all possible questions for the quiz.
+const allQuestions = [
+    { question: "What is the pressure/force that causes electrons to move?", options: ["Voltage", "Atom", "Potential Difference", "Electromotive Field"], correctAnswer: "Voltage" },
+    { question: "What is the smallest unit of matter and the fundamental building block of matter?", options: ["Voltage", "Atom", "Potential Difference", "Electromotive Field"], correctAnswer: "Atom" },
+    { question: "What is a 'voltage rise' in the context of electricity?", options: ["An increase in potential difference along a conductor", "A decrease in potential difference along a conductor", "The electrostatic force between two charged objects", "An area under the influence of electrostatic charges"], correctAnswer: "An increase in potential difference along a conductor" },
+    { question: "What is a 'voltage drop' in the context of electricity?", options: ["An increase in potential difference along a conductor", "A decrease in potential difference along a conductor", "The electrostatic force between two charged objects", "An area under the influence of electrostatic charges"], correctAnswer: "A decrease in potential difference along a conductor" },
+    { question: "What do we call electrons that leave the atom?", options: ["Free Electrons", "Voltage Drop", "Atomoids", "Electromotive Electrons"], correctAnswer: "Free Electrons" },
+    { question: "What type of materials permit the free motion of electrons?", options: ["Electricity", "Conductors", "Free Electrons", "Capacitors"], correctAnswer: "Conductors" },
+    { question: "What is the term for the opposition to current flow in a circuit?", options: ["Electricity", "Conductors", "Resistance", "Voltage"], correctAnswer: "Resistance" },
+    { question: "Which of the following does not permit the free motion of electrons?", options: ["Electricity", "Conductors", "Resistance", "Insulator"], correctAnswer: "Insulator" },
+    { question: "What is an electrical device with an insulating material called a dielectric that separates two conductors?", options: ["Capacitor", "Insulator", "Electromagnetic Field", "Resistor"], correctAnswer: "Capacitor" },
+    { question: "In which type of current does the flow continuously occur in the same direction?", options: ["Alternating current", "Direct current", "Variable current", "Inverse current"], correctAnswer: "Direct current" },
+    { question: "What is the pressure or force that causes electrons to move in a circuit?", options: ["Current", "Voltage", "Resistance", "Conductor"], correctAnswer: "Voltage" },
+    { question: "How is the measurement in volts represented, often denoted by a capital E or V?", options: ["Current", "Voltage", "Resistance", "Power"], correctAnswer: "Voltage" },
+    { question: "What is caused by voltage and is measured in Amps?", options: ["Current", "Voltage", "Resistance", "Power"], correctAnswer: "Current" },
+    { question: "What is measured in Ohms?", options: ["Current", "Voltage", "Resistance", "Power"], correctAnswer: "Resistance" },
+    { question: "This formula represents which law below? E=IR", options: ["Faraday’s Law", "Pascal’s Law", "Ohms’ Law", "Columbus’ Law"], correctAnswer: "Ohms’ Law" },
+    { question: "What term describes the relationship between magnetism and electrical current?", options: ["Magnetism", "Electromagnetism", "Magnetic Flux", "Permeability"], correctAnswer: "Electromagnetism" },
+    { question: "What term refers to the ability of a material to concentrate magnetic lines of flux?", options: ["Magnetism", "Electromagnetism", "Magnetic Flux", "Permeability"], correctAnswer: "Permeability" },
+    { question: "What are the three factors that determine the amount of induced voltage in a coil?", options: ["Speed, strength, and size", "Resistance, capacitance, and inductance", "Number of turns, speed, and magnetic flux strength", "Voltage, current, and resistance"], correctAnswer: "Number of turns, speed, and magnetic flux strength" },
+    { question: "If the number of turns of wire in a coil is increased, what effect does it have on induced voltage?", options: ["Decreases induced voltage", "No effect on induced voltage", "Increases induced voltage", "Stabilizes induced voltage"], correctAnswer: "Increases induced voltage" },
+    { question: "How can the speed at which conductors cut across magnetic flux lines be increased?", options: ["Decreasing the number of turns in the coil", "Reducing the magnetic flux density", "Physically causing the conductors' speed to increase", "Decreasing the strength of the magnetic field"], correctAnswer: "Physically causing the conductors' speed to increase" },
+    { question: "What term describes the concentration of magnetic flux lines within a certain area?", options: ["Magnetic flux density", "Magnetic resistance", "Flux capacitance", "Inductive strength"], correctAnswer: "Magnetic flux density" },
+    { question: "What is electromagnetic induction?", options: ["The production of electricity through chemical reactions", "The generation of a magnetic field by an electric current", "The creation of an electric current in a conductor by a changing magnetic field", "The transfer of heat through electromagnetic waves"], correctAnswer: "The creation of an electric current in a conductor by a changing magnetic field" },
+    { question: "What are the coils used in an alternating current (AC) circuit to take advantage of self-inductance called?", options: ["Inductors", "Inductance", "Voltage", "Counter Electromotive Force"], correctAnswer: "Inductors" },
+    { question: "What is the generated voltage that always opposes the voltage applied to the coil or circuit?", options: ["Inductors", "Inductance", "Self-Inductance", "Counter Electromotive Force"], correctAnswer: "Counter Electromotive Force" },
+    { question: "What term is used to describe electricity created through friction?", options: ["Static Electricity", "Fuse", "Photoelectric effect", "Electrochemistry"], correctAnswer: "Static Electricity" },
+    { question: "This device converts AC to DC power?", options: ["Fuse", "Rectifier", "Photoelectric effect", "Battery"], correctAnswer: "Rectifier" },
+    { question: "In what type of circuit do components share the same voltage but have separate current paths?", options: ["Series", "Open circuit", "Ground", "Parallel circuit"], correctAnswer: "Parallel circuit" },
+    { question: "What is the total power consumed by a circuit when it is open?", options: ["Zero", "Equal to the power source voltage", "Dependent on the resistance of the circuit", "Increased due to the open circuit condition"], correctAnswer: "Zero" },
+    { question: "What is the primary cause of short circuits in a circuit?", options: ["High resistance connections", "Inadvertent connection between two points", "Excessive voltage", "Capacitor failure"], correctAnswer: "Inadvertent connection between two points" },
+    { question: "What is the primary purpose of a battery?", options: ["To store electrical energy", "To convert electrical energy into chemical energy", "To store chemical energy and convert it into electrical energy", "To generate mechanical energy"], correctAnswer: "To store chemical energy and convert it into electrical energy" },
+    { question: "What is the term for a current of one ampere flowing for one hour?", options: ["Ampere-Hour", "Rectifier", "Static Electricity", "Specific Gravity"], correctAnswer: "Ampere-Hour" },
+    { question: "What is a conducting element in an electric cell?", options: ["Ground", "Electrode", "Series", "Switch"], correctAnswer: "Electrode" },
+    { question: "What is the ratio comparing the weight of any liquid to the weight of an equal volume of water?", options: ["Specific gravity", "Short circuit", "Breaker", "Electrode"], correctAnswer: "Specific gravity" },
+    { question: "What is a battery that uses liquid as the electrolyte?", options: ["Fuse", "Electrolyte", "Electrode", "Voltaic cell"], correctAnswer: "Voltaic cell" },
+    { question: "What is a substance whose solution conducts an electric current?", options: ["Junction", "Electrode", "Fuse", "Electrolyte"], correctAnswer: "Electrolyte" },
+    { question: "Why can storage batteries be particularly dangerous?", options: ["They have a small capacity", "They cannot provide electrical current", "They have exposed conductors at the terminals", "They use a non-conductive electrolyte"], correctAnswer: "They have exposed conductors at the terminals" },
+    { question: "What makes the face and eyes particularly sensitive to the hazards of storage batteries?", options: ["Risk of electrical shock", "Exposure to extreme heat", "Acid burns from the electrolyte", "Contact with exposed conductors"], correctAnswer: "Acid burns from the electrolyte" },
+    { question: "What gas is released during charging operations of a lead-acid storage battery?", options: ["Oxygen", "Helium", "Hydrogen", "Nitrogen"], correctAnswer: "Hydrogen" },
+    { question: "What is a chemical cell also known as?", options: ["Electrolytic cell", "Photovoltaic cell", "Wet cell", "Dry cell"], correctAnswer: "Dry cell" },
+    { question: "What term refers to the number of cycles (periods) per second?", options: ["Torque", "Frequency", "Slip", "Voltage Regulator"], correctAnswer: "Frequency" },
+    { question: "What is the time it takes for a generator to complete one cycle?", options: ["Period", "Starting torque", "Full load current", "Frequency"], correctAnswer: "Period" },
+    { question: "What is the term for the turning force in a motor?", options: ["Torque", "Slip", "Voltage", "Left-hand rule"], correctAnswer: "Torque" },
+    { question: "Why is the starting current in an AC motor greater than the normal operating current?", options: ["Due to power required for continuous operation", "To overcome rotor inertia", "To reduce magnetic field strength", "To decrease energy consumption"], correctAnswer: "To overcome rotor inertia" },
+    { question: "What is slip in the context of an AC induction motor?", options: ["The rotor's absolute speed", "The synchronous speed of the magnetic field", "The difference between rotor speed and synchronous speed", "The stator's rotational speed"], correctAnswer: "The difference between rotor speed and synchronous speed" },
+    { question: "What is the primary function of a transformer?", options: ["To change the frequency of electrical energy", "To store electrical energy", "To transfer electrical energy from one circuit to another", "To generate electrical energy"], correctAnswer: "To transfer electrical energy from one circuit to another" },
+    { question: "What does a transformer typically change in the process of transferring electrical energy?", options: ["Frequency and current", "Voltage and current", "Voltage and frequency", "Current and impedance"], correctAnswer: "Voltage and current" },
+    { question: "What components are found in every transformer?", options: ["Capacitors and resistors", "Primary winding and AC power source", "Inductors and diodes", "Primary winding and one or more secondary windings"], correctAnswer: "Primary winding and one or more secondary windings" },
+    { question: "What is the primary purpose of a substation in an Electrical Distribution System?", options: ["To generate electrical power", "To connect all feeder breakers to the power source", "To reduce the voltage of transmission lines", "To store electrical power"], correctAnswer: "To reduce the voltage of transmission lines" },
+    { question: "How is an electrical load defined in the context of Electrical Distribution Systems?", options: ["Any device that consumes electrical power", "The power supplied to loads when normal power is lost", "The distribution point for feeder breakers", "Electrical components essential to system operation"], correctAnswer: "Any device that consumes electrical power" },
+    { question: "What is standby power in Electrical Distribution Systems?", options: ["The power normally supplied to loads", "The power consumed by electrical loads", "The power supplied when normal power is lost", "The centralized distribution point for 480 VAC loads"], correctAnswer: "The power supplied when normal power is lost" },
+    { question: "What is the function of switchgear in an Electrical Distribution System?", options: ["Connects all feeder breakers to the power source", "Acts as a centralized control point for 480 VAC loads", "Ties circuit breakers to a common point with bus bars", "Provides distribution of power to small loads"], correctAnswer: "Ties circuit breakers to a common point with bus bars" },
+    { question: "What is the purpose of a panelboard in Electrical Distribution Systems?", options: ["Ties circuit breakers to a common point with bus bars", "Acts as a centralized control point for 480 VAC loads", "Provides distribution of power to small loads", "Reduces the voltage of transmission lines"], correctAnswer: "Provides distribution of power to small loads" },
+    { question: "How is an electrical fault defined in the context of Electrical Distribution Systems?", options: ["The power supplied when normal power is lost", "Any device that consumes electrical power", "Component overloads, short circuits, and open circuits", "Electrical components essential to system operation"], correctAnswer: "Component overloads, short circuits, and open circuits" },
+    { question: "What is the function of system ground in Electrical Distribution Systems?", options: ["Connects all feeder breakers to the power source", "Acts as a centralized control point for 480 VAC loads", "Provides distribution of power to small loads", "Establishes a conducting connection between a circuit or equipment and the earth"], correctAnswer: "Establishes a conducting connection between a circuit or equipment and the earth" },
+    { question: "What is the primary function of a 13.8 kV to 480 VAC substation?", options: ["Convert 480 VAC to 13.8 kV", "Receive power and convert it from 13.8 kV to 480 VAC", "Control major components using 13.8 kV", "Transfer power from 480 VAC to 13.8 kV"], correctAnswer: "Receive power and convert it from 13.8 kV to 480 VAC" },
+    { question: "What would happen to the current in an electrical system experiencing a ground fault?", options: ["Current would decrease", "Current would remain constant", "Current would increase dramatically", "Current would fluctuate randomly"], correctAnswer: "Current would increase dramatically" },
+    { question: "What is the likely outcome for a circuit breaker in the event of an electrical system ground fault?", options: ["The circuit breaker would close", "The circuit breaker would trip", "The circuit breaker would remain unaffected", "The circuit breaker would disconnect from the system"], correctAnswer: "The circuit breaker would trip" },
+    { question: "What is a potential danger associated with improper system and equipment grounds?", options: ["Excessive voltage drop", "Increased power efficiency", "Enhanced system stability", "Electrical shock"], correctAnswer: "Electrical shock" },
+    { question: "What is the primary function of the main contacts in a circuit breaker?", options: ["To prevent arcing", "To cool the system", "To carry the operating load current", "To stretch and extinguish the arc"], correctAnswer: "To carry the operating load current" },
+    { question: "What does the 'Racked in (connected)' position of a 480 VAC circuit breaker signify?", options: ["The breaker is ready for maintenance", "The breaker is lined up for operational testing", "The breaker is lined up for operation", "The breaker is disconnected"], correctAnswer: "The breaker is lined up for operation" },
+    { question: "In the 'Racked out (disconnected)' position, what is the status of the 480 VAC circuit breaker?", options: ["Ready for operational testing", "Electrically connected to control power", "Ready for maintenance and not electrically connected", "Lined up for operation"], correctAnswer: "Ready for maintenance and not electrically connected" },
+    { question: "What is the purpose of the 'Test' position in a 480 VAC circuit breaker?", options: ["To disconnect the breaker for maintenance", "To line up the breaker for operational testing", "To connect the breaker for operation", "To prepare the breaker for control power"], correctAnswer: "To line up the breaker for operational testing" },
+    { question: "What is the primary purpose of the undervoltage relay in an electrical system?", options: ["To protect against high voltage conditions", "To protect against excessive temperature", "To protect against low voltage conditions", "To regulate voltage fluctuations"], correctAnswer: "To protect against low voltage conditions" },
+    { question: "How does the thermal relay contribute to electrical system protection?", options: ["By detecting ground faults", "By monitoring excessive temperature", "By preventing short circuits", "By regulating voltage levels"], correctAnswer: "By monitoring excessive temperature" },
+    { question: "What is the function of the instantaneous overcurrent relay in protecting electrical motors?", options: ["To regulate motor speed", "To detect low voltage conditions", "To protect against excessive current during short circuits", "To control equipment circuit breakers based on temperature fluctuations"], correctAnswer: "To protect against excessive current during short circuits" },
+    { question: "What is the primary function of motor controllers?", options: ["To generate electrical power", "To control and protect the operation of a motor", "To measure voltage and current", "To act as a transformer"], correctAnswer: "To control and protect the operation of a motor" },
+    { question: "What is the operational characteristic of the LVRE motor controller upon restoration of voltage?", options: ["It requires manual intervention to restart the motor", "The motor re-starts automatically", "Contactor coil M de-energizes, opening the M contacts", "The RUN switch must be turned off to restart the motor"], correctAnswer: "The motor re-starts automatically" },
+    { question: "What instrument is used to detect conductor insulation resistance to ground?", options: ["Voltmeter", "Ground Detector", "Variable Speed Drive", "Ampere-Hour Meter"], correctAnswer: "Ground Detector" },
+    { question: "What type of meter registers ampere-hours and is used for measuring electricity usage in a home?", options: ["Ohm Meter", "Uninterruptible Power Supply (UPS)", "Wattmeter", "Ampere-Hour Meter"], correctAnswer: "Ampere-Hour Meter" },
+    { question: "What instrument is used to determine resistance and is connected to a component removed from the circuit?", options: ["Ammeter", "Ohm Meter", "Wattmeter", "Variable Speed Drive"], correctAnswer: "Ohm Meter" },
+    { question: "What instrument measures electric current and must be placed in series with the circuit being tested?", options: ["Ground Detector", "Voltmeter", "Ammeter", "Wattmeter"], correctAnswer: "Ammeter" },
+    { question: "What instrument measures DC power or true AC power, using fixed coils for current and a movable coil for voltage?", options: ["Wattmeter", "Ampere-Hour Meter", "Ohm Meter", "Variable Speed Drive"], correctAnswer: "Wattmeter" },
+    { question: "What is the main function of an Uninterruptible Power Supply (UPS)?", options: ["Measures electric current", "Maintains continuity of power to critical loads during standby generator startup", "Changes the speed of an AC induction motor", "Registers ampere-hours in a circuit"], correctAnswer: "Maintains continuity of power to critical loads during standby generator startup" },
+    { question: "What is a Variable Speed Drive?", options: ["An instrument for measuring resistance", "A device that changes the speed of an AC induction motor", "An integrating meter similar to a watt-hour meter", "A component connected to a circuit for resistance testing"], correctAnswer: "A device that changes the speed of an AC induction motor" },
+    { question: "The VSDs used at Savannah River Site (SRS) facilities are able to supply an adjustable voltage and frequency to motors over a range of ___ to ___.", options: ["5-1", "7-1", "8-2", "10-1"], correctAnswer: "10-1" },
+    { question: "How does the frequency of the power supply relate to the speed of the rotating field in an AC induction motor?", options: ["They have no correlation", "The relationship is inversely proportional", "The speed is directly proportional to the frequency", "The speed is directly proportional to the voltage"], correctAnswer: "The speed is directly proportional to the frequency" },
+    { question: "The term “starter” is used for all controllers that cannot change the speed of a(n) _____ induction motor.", options: ["DC", "AC", "VAC", "MCC"], correctAnswer: "AC" },
+    { question: "AC induction motors, sometimes called ___________________ motors, are inherently single-speed motors.", options: ["High speed motors", "Squirrel cage motors", "Rabbit cage motors", "VSDs"], correctAnswer: "Squirrel cage motors" },
+    { question: "Basically, electrical hazards can be categorized into three types, the first and most recognized hazard is _________________ shock.", options: ["Electrical", "Electrical Burns", "Effects of blasts which include pressure impact.", "None of the above"], correctAnswer: "Electrical" },
+    { question: "Many factors influence the effect of electricity on the human body such as:", options: ["Current magnitude", "Duration", "Frequency", "All of the above"], correctAnswer: "All of the above" },
+    { question: "The first step in developing a safe work environment is to have ___________ which provide guidelines to employees to perform various tasks safely.", options: ["Good safety policies in place", "Strict supervisors", "Procedures", "Clear safety signs"], correctAnswer: "Procedures" },
+    { question: "The OSHA regulation regarding electrical safe practices states that live parts shall _______________ before working on or near them.", options: ["be Energized", "be Verified", "be Looked at", "be De-energized"], correctAnswer: "be De-energized" },
+    { question: "The OSHA regulation regarding electrical safe practices states that even after the exposed parts have been de-energized, they shall still be treated as energized until they are ______________.", options: ["Locked out and/or tagged out", "Energized", "Verified", "Found in the MCC room"], correctAnswer: "Locked out and/or tagged out" },
+    { question: "Before initiating any hands-on electrical circuit conductors: After lockout is established, the _______________ shall evaluate the work site for lock-a-like energized equipment hazards and identify as appropriate to alert personnel.", options: ["Any supervisor", "Lead work group supervisor", "Team member", "Site manager"], correctAnswer: "Lead work group supervisor" },
+    { question: "What are common symptoms associated with electrical shock?", options: ["Headache and dizziness", "Nausea and blurred vision", "Tingling sensation, muscle contractions, respiratory issues, cardiac issues, burns, or internal organ damage", "Joint pain and fever"], correctAnswer: "Tingling sensation, muscle contractions, respiratory issues, cardiac issues, burns, or internal organ damage" },
+    { question: "Why is it essential not to touch the victim or conductive material near the victim until the power is off?", options: ["To prevent the victim from moving", "To avoid further injury to the victim or rescuer", "To speed up the examination process", "To determine if the victim requires immediate transport"], correctAnswer: "To avoid further injury to the victim or rescuer" },
+    { question: "What precaution should be taken before attempting to remove a victim from an energized circuit?", options: ["Ensure that the victim is conscious", "Ensure that hands and feet are dry", "Remove any protective equipment", "Apply water to the victim's clothing"], correctAnswer: "Ensure that hands and feet are dry" },
+    { question: "What should be used to remove the victim from the conductor?", options: ["Metal wire", "Wet cloth", "Nonconductive material like a dry stick or board", "Water-filled container"], correctAnswer: "Nonconductive material like a dry stick or board" },
+    { question: "When conductors are energized, an alternative way of ensuring safety from the electrical hazards is to observe a safe ______________ distance.", options: ["Walking", "Running", "Short", "Approach"], correctAnswer: "Approach" },
+    { question: "SRS follows OSHA in stating the following safe practices. Before initiating any hands-on work on electrical conductors, the worker shall perform supplemental ____________ test on all exposed conductors or circuit parts within the boundary of his or her work area.", options: ["Hands-on", "Voltage", "Resistance", "Surge"], correctAnswer: "Voltage" },
+    { question: "What is the definition of Arc Flash?", options: ["A sudden increase in voltage in an electrical circuit", "The intentional redirection of electric current", "The gradual deterioration of electrical insulation", "A discharge of electricity through a combination of ionized air and vaporized conductor material"], correctAnswer: "A discharge of electricity through a combination of ionized air and vaporized conductor material" },
+    { question: "The danger of Arc flash is mostly concerned with ___________________.", options: ["Equipment damages", "Downtime", "Burns", "Power surges"], correctAnswer: "Burns" },
+    { question: "Meltable synthetic fibers shall not be worn when performing __________________ work.", options: ["Normal", "Mechanical", "Electrical", "Chemical"], correctAnswer: "Electrical" }
+];
+
+
+// --- DOM Element References ---
+const setupDiv = document.getElementById('setup');
+const startBtn = document.getElementById('start-btn');
+const codeKeyInput = document.getElementById('code-key-input');
+const quizForm = document.getElementById('quiz-form');
+const questionsWrapper = document.getElementById('questions-wrapper');
+const resultsDiv = document.getElementById('results');
+const scoreP = document.getElementById('score');
+const submitBtn = document.getElementById('submit-btn');
+const restartBtn = document.getElementById('restart-btn');
+
+// --- Functions ---
+
+/**
+ * Shuffles an array in place using the Fisher-Yates algorithm.
+ * @param {Array} array The array to shuffle.
+ * @returns {Array} The shuffled array.
+ */
+function shuffleArray(array) {
+    for (let i = array.length - 1; i > 0; i--) {
+        const j = Math.floor(Math.random() * (i + 1));
+        [array[i], array[j]] = [array[j], array[i]];
+    }
+    return array;
+}
+
+/**
+ * Dynamically creates and displays the question blocks in the DOM.
+ * @param {Array<Object>} questions An array of question objects to display.
+ */
+function displayQuestions(questions) {
+    questionsWrapper.innerHTML = '';
+    questions.forEach((q, index) => {
+        const questionBlock = document.createElement('div');
+        questionBlock.className = 'question-block';
+        
+        const questionText = document.createElement('p');
+        questionText.className = 'question-text';
+        questionText.textContent = `${index + 1}. ${q.question}`;
+        // Store the correct answer in a data attribute for easy access later
+        questionBlock.dataset.correctAnswer = q.correctAnswer;
+        questionBlock.appendChild(questionText);
+
+        const optionsContainer = document.createElement('div');
+        optionsContainer.className = 'options-container';
+
+        // Shuffle options for this specific question
+        const shuffledOptions = shuffleArray([...q.options]);
+        
+        shuffledOptions.forEach(option => {
+            const label = document.createElement('label');
+            label.className = 'option-label';
+            
+            const radio = document.createElement('input');
+            radio.type = 'radio';
+            radio.name = `question${index}`;
+            radio.value = option;
+            
+            label.appendChild(radio);
+            label.appendChild(document.createTextNode(option));
+            optionsContainer.appendChild(label);
+        });
+        
+        questionBlock.appendChild(optionsContainer);
+        questionsWrapper.appendChild(questionBlock);
+    });
+}
+
+/**
+ * Starts the quiz with the full set of questions.
+ */
+function startQuiz() {
+    // Always use the full length of the question bank
+    const num = allQuestions.length;
+
+    // Shuffle the entire question bank and take a slice of the desired size
+    const selectedQuestions = shuffleArray([...allQuestions]).slice(0, num);
+    
+    displayQuestions(selectedQuestions);
+
+    // Update UI visibility
+    setupDiv.style.display = 'none';
+    resultsDiv.style.display = 'none';
+    quizForm.style.display = 'block';
+    submitBtn.disabled = false;
+}
+
+/**
+ * Resets the UI to the initial setup screen.
+ */
+function resetToSetup() {
+    resultsDiv.style.display = 'none';
+    quizForm.style.display = 'none';
+    setupDiv.style.display = 'block';
+    submitBtn.disabled = false;
+    questionsWrapper.innerHTML = '';
+    codeKeyInput.value = ''; // Clear the code key input
+}
+
+
+// --- Event Listeners ---
+
+// Event listener for the "Start Quiz" button
+startBtn.addEventListener('click', () => {
+    if (codeKeyInput.value === '1225') {
+        startQuiz();
+    } else {
+        alert('Incorrect Access Code. Please try again.');
+        codeKeyInput.value = '';
+    }
+});
+
+// Event listener for the form submission
+quizForm.addEventListener('submit', event => {
+    event.preventDefault();
+
+    let score = 0;
+    const questionBlocks = document.querySelectorAll('.question-block');
+
+    questionBlocks.forEach((block) => {
+        const correctAnswer = block.dataset.correctAnswer;
+        const selectedRadio = block.querySelector(`input:checked`);
+        const allLabels = block.querySelectorAll('.option-label');
+        
+        // Disable all radio buttons for this question to prevent changes after submission
+        block.querySelectorAll('input[type="radio"]').forEach(radio => radio.disabled = true);
+
+        // Find the correct label and style it
+        allLabels.forEach(label => {
+             // Use textContent and trim() to remove leading/trailing whitespace for accurate comparison
+             if (label.textContent.trim() === correctAnswer) {
+                label.classList.add('correct');
+            }
+        });
+        
+        if (selectedRadio) {
+            if (selectedRadio.value === correctAnswer) {
+                score++;
+            } else {
+                // If a wrong answer was selected, style it as incorrect
+                selectedRadio.parentElement.classList.add('incorrect');
+            }
+        } else {
+            // If no answer was selected, style the entire question block
+            block.classList.add('unanswered');
+        }
+    });
+
+    const percentage = ((score / questionBlocks.length) * 100).toFixed(1);
+    scoreP.innerHTML = `You scored <span id="score-value">${score} out of ${questionBlocks.length}</span> (${percentage}%)`;
+    
+    // Display the results and disable the submit button
+    resultsDiv.style.display = 'block';
+    submitBtn.disabled = true;
+    window.scrollTo(0, 0); // Scroll to the top to see results
+});
+
+// Event listener for the "Try Again" button, which resets to the code key screen
+restartBtn.addEventListener('click', resetToSetup);
+
+</script>
+
+</body>
+</html>
